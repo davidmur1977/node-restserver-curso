@@ -1,15 +1,15 @@
 const express = require('express');
-
 const bcrypt = require('bcryptjs');
 const _ = require('underscore');
 
 const Usuario = require('../models/usuario');
-const { verificaToken, verificaAdmin_Role } = require('../middlewares/autenticacion');
+
+
 
 const app = express();
 
-//middleware que se disparará
-app.get('/usuario', verificaToken, (req, res) => {
+
+app.get('/usuario', function(req, res) {
 
     let desde = req.query.desde || 0;
     desde = Number(desde);
@@ -17,10 +17,11 @@ app.get('/usuario', verificaToken, (req, res) => {
     let limite = req.query.limite || 5;
     limite = Number(limite);
 
-    Usuario.find({ estado: true }, 'nombre email role estado google img')
-        .skip(desde)
-        .limit(limite)
+    Usuario.find({ estado: true }, 'nombre, email role estado google img') //el string de la derecha son los campos que mostramos
+        .skip(desde) //se salta los 5 primeros, muestra apartir de usuario 6
+        .limit(limite) //muestra 5
         .exec((err, usuarios) => {
+
 
             if (err) {
                 return res.status(400).json({
@@ -39,13 +40,13 @@ app.get('/usuario', verificaToken, (req, res) => {
 
             });
 
+        })
 
-        });
 
 
 });
 
-app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
+app.post('/usuario', function(req, res) {
 
     let body = req.body;
 
@@ -56,9 +57,8 @@ app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
         role: body.role
     });
 
-
+    //palabra reservada de mongoose
     usuario.save((err, usuarioDB) => {
-
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -66,24 +66,25 @@ app.post('/usuario', [verificaToken, verificaAdmin_Role], function(req, res) {
             });
         }
 
+        //usuarioDB.password = null;
+
         res.json({
             ok: true,
             usuario: usuarioDB
         });
-
 
     });
-
-
 });
 
-app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
+app.put('/usuario/:id', function(req, res) {
 
-    let id = req.params.id;
-    let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']);
+    let id = req.params.id; // <--este id es el de :id 
+    let body = _.pick(req.body, ['nombre', 'email', 'img', 'role', 'estado']); //<--- despues de req.body va el array con las propiedades VALIDAS ó SE PUEDAN ACTUALIZAR
+
+
+
 
     Usuario.findByIdAndUpdate(id, body, { new: true, runValidators: true }, (err, usuarioDB) => {
-
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -92,28 +93,22 @@ app.put('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) 
         }
 
         res.json({
+            //id //<---es lo mismo que poner id: id pero es redundante
             ok: true,
             usuario: usuarioDB
         });
-
-
     })
-
 });
 
-app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, res) {
-
+app.delete('/usuario/:id', function(req, res) {
 
     let id = req.params.id;
-
-    // Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
-
     let cambiaEstado = {
         estado: false
     };
 
+    //Usuario.findByIdAndRemove(id, (err, usuarioBorrado) => {
     Usuario.findByIdAndUpdate(id, cambiaEstado, { new: true }, (err, usuarioBorrado) => {
-
         if (err) {
             return res.status(400).json({
                 ok: false,
@@ -128,19 +123,16 @@ app.delete('/usuario/:id', [verificaToken, verificaAdmin_Role], function(req, re
                     message: 'Usuario no encontrado'
                 }
             });
-        }
+        };
 
+        //se borra físicamente
         res.json({
             ok: true,
+            estado: false,
             usuario: usuarioBorrado
         });
 
     });
-
-
-
 });
-
-
 
 module.exports = app;
