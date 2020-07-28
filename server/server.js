@@ -1,34 +1,49 @@
 require('./config/config');
 
 const express = require('express');
-const mongoose = require('mongoose');
-const path = require('path'); //paraobtener toda la url de public creamos path, usa libreria nativa de node, no se usa paquete extra
-
 const app = express();
-
-const bodyParser = require('body-parser')
+const bodyParser = require('body-parser');
 
 // parse application/x-www-form-urlencoded
 app.use(bodyParser.urlencoded({ extended: false }))
-
+ 
 // parse application/json
-app.use(bodyParser.json())
+app.use(bodyParser.json());
+ 
+app.get('/usuario', function (req, res) {
+  res.json('get Usuario');  //cambiamos .send por .json para trabajar con json
+});
 
-//habilitar la carpeta public 
-app.use(express.static(path.resolve(__dirname, '../public'))); //en lugar de + se usa ,
+app.post('/usuario', function (req, res) {
+  let body = req.body;
 
+  if (body.nombre === undefined){
+      res.status(400).json({
+        ok:false,
+        mensaje: 'El nombre es necesario'
+      });
+  } else{
+    res.json({
+      persona: body
+    
+    });  //lo mismo que body: body
+  }
 
-//Configuración global de rutas
-app.use(require('./routes/index'));
+ 
+});
 
-mongoose.connect(process.env.URLDB,
-    //linea que añadimos para evitar warning al lanzar el server.js
-    { useNewUrlParser: true, useCreateIndex: true },
-    (err, res) => {
-        if (err) throw err;
-        console.log('Base datos ONLINE');
-    });
+app.put('/usuario/:id', function (req, res) {
+  
+  let id = req.params.id; //el .id es el mismo nombre que :id de arriba,
+  res.json({
+    id   //es lo mismo que id: id, pero es redundante
+  }); 
+});
 
-app.listen(3000, () => {
-    console.log('Escuchando puerto:', process.env.PORT);
+app.delete('/usuario', function (req, res) {
+  res.json('delete Usuario');  //cambiamos .send por .json para trabajar con json
+});
+ 
+app.listen(process.env.PORT, ()=>{
+    console.log('Escuchando puerto: ', 3000);
 });

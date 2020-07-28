@@ -1,22 +1,23 @@
 {
-    "name": "07-restserver",
-    "version": "1.0.0",
-    "description": "",
-    "main": "index.js",
-    "scripts": {
-        "start": "node server/server.js",
-        "test": "echo \"Error: no test specified\" && exit 1"
-    },
-    "author": "",
-    "license": "ISC",
-    "dependencies": {
-        "bcryptjs": "^2.4.3",
-        "body-parser": "^1.19.0",
-        "express": "^4.17.1",
-        "google-auth-library": "^5.2.1",
-        "jsonwebtoken": "^8.5.1",
-        "mongoose": "^5.6.11",
-        "mongoose-unique-validator": "^2.0.3",
-        "underscore": "^1.9.1"
-    }
+  "name": "07-restserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/davidmur1977/node-restserver-curso.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/davidmur1977/node-restserver-curso/issues"
+  },
+  "homepage": "https://github.com/davidmur1977/node-restserver-curso#readme",
+  "dependencies": {
+    "body-parser": "^1.19.0",
+    "express": "^4.17.1"
+  }
 }
