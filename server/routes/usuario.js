@@ -9,7 +9,8 @@ const {verificaToken, verificaAdmin_Role} = require('../middlewares/autenticacio
 const app = express();
 
 
-app.get('/usuario', [verificaToken, verificaAdmin_Role],  (req, res)=> {
+//app.get('/usuario', [verificaToken, verificaAdmin_Role],  (req, res)=> {
+app.get('/usuario', (req, res)=> {  
     
   return res.json({
        usuario: req.usuario,
@@ -50,7 +51,8 @@ app.get('/usuario', [verificaToken, verificaAdmin_Role],  (req, res)=> {
 
   });
   
-  app.post('/usuario', [verificaToken, verificaAdmin_Role], function (req, res) {
+  //app.post('/usuario', [verificaToken, verificaAdmin_Role], function (req, res) {
+  app.post('/usuario', function (req, res) {    
       let body = req.body;
     
     let usuario = new Usuario({
