@@ -56,7 +56,7 @@ app.post('/login', (req,res) =>{
           usuario: usuarioDB,
           token  //equivale a token:token
         });
-        res.send(res);
+        
     });
 
 });
