@@ -73,7 +73,7 @@ app.get('/usuario', (req, res)=> {
        
         res.json({
             ok:true,
-            usaurio:usuarioDB
+            usuario:usuarioDB
         });
 
     });
