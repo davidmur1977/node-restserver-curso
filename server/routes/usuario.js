@@ -60,6 +60,7 @@ app.get('/usuario', (req, res)=> {
         email: body.email,
         password:bcrypt.hashSync(body.password, 10),
         role:body.role
+       
     });
 
     usuario.save( (err, usuarioDB)=>{
